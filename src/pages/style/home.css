@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+
+.create h1 {
+    font-family: "Nerko One";
+    text-wrap: nowrap;
+    align-self: center;
+    padding: 10px;
+    margin-bottom: 403px;
+    margin-left: 40px;
+    margin-right: 30px;
+    background-color: rgba(173, 195, 170, 0.5);
+    border: 7px solid rgba(45, 107, 34, 0.2);
+    border-style:ridge;
+    color:white;
+    font-size: 70px;
+    display: flex;
+}
+
+#button {
+    background-color: rgb(248, 168, 211);
+    color:rgb(255, 255, 255);
+    font-size: 13px;
+    width: 180px;
+    padding: 10px;
+    margin-left: 30px;
+    border-radius: 5px;
+    border: none;
+    cursor:pointer;
+}
+
+#button:hover {
+    background-color: rgb(241, 131, 182);
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0 ,0 ,0.2);
+}
