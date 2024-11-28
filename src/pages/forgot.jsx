@@ -16,7 +16,6 @@ export default function Forgot() {
     e.preventDefault();
 
     if (otpMethod === 'number' && number) {
-      // Send OTP via phone using Twilio (client-side call)
       const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
       try {
         const response = await fetch('/sendOtp', {
