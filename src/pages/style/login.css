@@ -15,6 +15,7 @@
     text-align: center;
     background-color: rgba(180, 159, 191, 0.872);
     border-radius: 5px;
+    width: 300px;
 }
 
 .login-left {
@@ -60,15 +61,25 @@
 }
 
 .one {
-    margin: 15px;
     margin-bottom: 20px;
 }
 
 .two {
-    margin: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
-input[type="text"], input[type="password"] {
+#login-img {
+    position: relative;
+    right: 25px;
+    cursor: pointer;
+    top: 6px;
+    width: 18px;
+    height: 18px;
+}
+
+#username,
+#log-pass {
     border-radius: 5px;
     padding: 7px;
     width: 200px;
@@ -77,8 +88,11 @@ input[type="text"], input[type="password"] {
     border: 1.5px solid rgba(63, 58, 96, 0.5);
 }
 
+#log-pass {
+    margin-left: 20px;
+}
+
 .login-right {
-    width: 50%;
     float: right;
     display: flex;
     flex-direction: column;
@@ -86,7 +100,16 @@ input[type="text"], input[type="password"] {
     padding: 10px;
 }
 
-#password, #usernaame {
+.user,
+.pass-bel {
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    font-size: 14px;
+}
+
+#log-pass, #usernaame {
     position: relative;
     flex-direction: column;
 }
@@ -99,18 +122,21 @@ input[type="text"], input[type="password"] {
 #login-submitButton {
     padding: 10px;
     margin-left: 30px;
-    width: auto;
+    width: 50px;
     font-size: 13px;
     color: white;
     text-wrap: nowrap;
-    background-color: rgba(158, 198, 154, 0.872);
+    background-color: rgba(195, 154, 223, 0.872);
     border-radius: 5px;
     border-color: none;
     border-style: none;
 }
 
 #login-submitButton:hover {
-    background-color: rgba(125, 164, 93, 0.872);
+    background-color: rgba(160, 105, 197, 0.872);
+    box-shadow: 0 2px 5px rgba(0, 0, 0 ,0.2);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .notification.hidden {
@@ -132,20 +158,21 @@ input[type="text"], input[type="password"] {
 }
 
 .login-link {
-    display: flex;
     margin-left: 30px;
     font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.login-link a {
-    color: rgb(158, 198, 154);
+.login-a {
+    color: rgb(214, 151, 216);
     font-size: 13px;
     margin-left: 4px;
+    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
 }
 
-.login-link a:hover {
-    color: rgb(125, 168, 121);
+.login-a:hover {
+    color: rgb(158, 103, 160);
     text-decoration: underline;
 }
 
@@ -164,8 +191,9 @@ input[type="text"], input[type="password"] {
     height: 18px;
 }
 
-.checkbox {
+.l-checkbox {
     margin-right: 125px;
     font-size: 12px;
     text-align: center;
+    margin-bottom: 35px;
 }

@@ -1,18 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { firestore } from "../firebase"; // Ensure you have the firebase.js setup
-import { addDoc, collection } from "@firebase/firestore";
+import React, { useState } from 'react';
 import './style/forgot.css'; // Assuming you have the CSS file for styling
 
 // Function to handle OTP sending logic
-const ResendOTP = () => {
+export default function Forgot() {
   const [otpMethod, setOtpMethod] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [number, setNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const messageRef = useRef(); // For collecting the message
-  const usersCollection = collection(firestore, "users");
 
   const handleOtpMethodChange = (e) => {
     setOtpMethod(e.target.value);
@@ -21,7 +15,7 @@ const ResendOTP = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (otpMethod === 'number' && phoneNumber) {
+    if (otpMethod === 'number' && number) {
       // Send OTP via phone using Twilio (client-side call)
       const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
       try {
@@ -30,15 +24,13 @@ const ResendOTP = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             otp,
-            phoneNumber
+            number
           })
         });
 
-        window.location.href= '/newotp'
-
         if (response.ok) {
-          setOtpSent(true);
           alert('OTP sent successfully!');
+          window.location.href = 'newotp'; // Redirect after sending OTP
         } else {
           setErrorMessage('Failed to send OTP via phone.');
         }
@@ -60,7 +52,6 @@ const ResendOTP = () => {
         });
 
         if (response.ok) {
-          setOtpSent(true);
           alert('OTP sent successfully!');
         } else {
           setErrorMessage('Failed to send OTP via email.');
@@ -76,64 +67,68 @@ const ResendOTP = () => {
 
   return (
     <div>
-      <form className="forgot-back" onSubmit={handleSubmit}>
-        <div className="back-img">
-          <img
-            src="/public/back.png"
-            alt="back arrow icon"
-            className="icon arrow"
-            style={{ width: '20px', height: '20px' }}
-            onClick={() => window.location.href = '/login'} // Redirect to previous page
-          />
+      <div className="forgot">
+        <form className="forgot-back" onSubmit={handleSubmit}>
+          <div className="back-img">
+            <img
+              src="./back.png"
+              alt="back arrow icon"
+              className="icon arrow"
+              style={{ width: '20px', height: '20px' }}
+              onClick={() => window.location.href = '/login'} // Redirect to previous page
+            />
+          </div>
+        <div className='opt'>
+          <label>Send OTP via:</label>
+          <select
+            name="otp"
+            id="forgot-otp"
+            value={otpMethod}
+            onChange={handleOtpMethodChange}
+            required
+          >
+            <option value="">Select an Option</option>
+            <option value="number">Phone Number</option>
+            <option value="email">Email</option>
+          </select>
         </div>
+          {/* Phone Number Input */}
+          {otpMethod === 'number' && (
+            <div id="phone-input">
+              <label className='num'>Enter Phone Number:</label>
+              <input
+                type="tel"
+                name="number"
+                id="forgot-number"
+                placeholder="012 345 6789"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+                required
+              />
+            </div>
+          )}
 
-        <label>Send OTP via:</label>
-        <select
-          name="otp"
-          id="forgot-otp"
-          value={otpMethod}
-          onChange={handleOtpMethodChange}
-          required
-        >
-          <option value="">Select an Option</option>
-          <option value="number">Phone Number</option>
-          <option value="email">Email</option>
-        </select>
+          {/* Email Input */}
+          {otpMethod === 'email' && (
+            <div id="email-input">
+              <label className='em'>Enter Email:</label>
+              <input
+                type="email"
+                name="email"
+                id="forgot-email"
+                placeholder="example@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          )}
+          <button type="submit" id="for-submit">Send OTP</button>
 
-        {/* Phone Number Input */}
-        {otpMethod === 'number' && (
-          <div id="phone-input">
-            <label>Enter Phone Number:
-            <input
-              type="tel"
-              name="number"
-              id="forgot-number"
-              placeholder="012 345 6789"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            </label>
-          </div>
-        )}
-
-        {/* Email Input */}
-        {otpMethod === 'email' && (
-          <div id="email-input">
-            <label>Enter Email:</label>
-            <input
-              type="email"
-              name="email"
-              id="forgot-email"
-              placeholder="example@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        )}
-        <button type="submit" id="for-submit" onClick={() => window.location.href = '/newotp'}>Send OTP</button>
-      </form>
+          {/* Error Message Display */}
+          {errorMessage && <p className="error" style={{ color: 'red' }}>{errorMessage}</p>}
+        </form>
+      </div>
     </div>
   );
 };
-
-export default ResendOTP;

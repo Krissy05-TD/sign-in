@@ -4,14 +4,11 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     align-items: center;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
     height: 100vh;
     display: flex;
 }
 
-.left {
+.new-left {
     background-image: url('/public/flower.jpg');
     background-position: center;
     background-size: cover;
@@ -23,7 +20,7 @@
     box-shadow: 0 2px 5px rgba(0, 0 ,0 ,0.2);
 }
 
-.left h1 {
+.new-left h1 {
     font-family: "Nerko One";
     text-wrap: nowrap;
     align-self: center;
@@ -39,12 +36,21 @@
     display: flex;
 }
 
-.left img {
+.new-left img {
     align-self: center;
     margin: 10px;
     width:50px;
     height:50px;
     border-radius:50px;
+}
+
+.new-right h1 {
+    text-align: center;
+    font-family: "Nerko One";
+    margin-bottom: 30px;
+    justify-content: center;
+    display: flex;
+    position: relative;
 }
 
 .n-signup-form {
@@ -59,31 +65,20 @@
     align-items: center;
 }
 
-label {
+.new-requirements {
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: rgb(251, 235, 198);
+}
+
+#new-requirements-list {
     font-size: 13px;
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
+    padding-left: 0;
     justify-content: center;
 }
 
-.requirements {
-    background-color: rgb(251, 235, 198);
-    font-size: 13px;
-}
-
-.requirements p {
-    margin-top: 14px;
-}
-
-#characters,
-#digits,
-#uppercase,
-#special {
-    margin-right: 40px;
-}
-
 .invalid {
-    color: cornflowerblue;
+    color: rgb(31, 72, 148);
     padding: 3px;
 }
 .valid {
@@ -91,21 +86,18 @@ label {
     padding: 3px;
 }
 
-#submit-btn {
+#new-submit-btn {
     display: flex;
-    text-align: center;
-    align-self: center;
     justify-content: center;
     background-color: rgba(255, 206, 115, 0.568);
     width: 100px;
-    margin-top: 10px;
     margin-left: 30px;
     padding: 10px;
     border: none;
     border-radius: 5px;
 }
 
-#submit-btn:hover {
+#new-submit-btn:hover {
     background-color: rgba(255, 195, 83, 0.568);
     box-shadow: 0 2px 2px rgba(0, 0 ,0 ,0.2);
     transition: background-color 0.3s ease;
@@ -118,43 +110,56 @@ label {
     padding: 7px;
     border-radius: 5px;
     display: flex;
+    margin: auto;
     border: none;
     justify-content: center;
 }
 
-.password-container img {
-    position: absolute;
-    left: 40%;
-    bottom: 35px;
+.new-password-container {
+    position: relative;
+    align-items: center;
 }
 
-#togglePassword {
+.new-password-container img {
+    position: absolute;
+    left: 40%;
+    bottom: 25px;
+}
+
+#new-t-check {
     position:relative;
     width: 20px;
     height: 20px;
 }
 
-#togglePassword:hover {
+#new-t-check:hover {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#toggleConfirmPassword {
+#new-check {
     position: relative;
     width: 20px;
     height: 20px;
 }
 
-#toggleConfirmPassword:hover {
+#new-check:hover {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-input [type="password"] {
-    margin-left: auto;
+#n-password,
+#n-confirm {
+    width: 200px;
+    padding: 7px;
+    border-radius: 5px;
+    border-style: none;
+    margin: auto;
+    display: flex;
+    justify-content: center;
 }
 
-.loading-container {
+.new-loading-container {
     display: none; /* Hidden by default */
     position: absolute; /* Cover the whole screen */
     top: 50%;

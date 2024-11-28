@@ -1,15 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { firestore } from "../firebase"; // Ensure you have the firebase.js setup
-import { addDoc, collection } from "@firebase/firestore";
 import './style/newotp.css';
 
 export default function NewOTP() {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [loading, setLoading] = useState(false);
   const inputs = useRef([]);
-
-  const messageRef = useRef(); // For collecting the message
-  const usersCollection = collection(firestore, "users");
 
   // Function to handle OTP input change
   const handleChange = (e, index) => {
@@ -19,7 +14,6 @@ export default function NewOTP() {
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Move to the next input if the current one is filled
       if (value && index < 5) {
         inputs.current[index + 1].focus();
       }
@@ -38,10 +32,11 @@ export default function NewOTP() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate an OTP verification process
+    // Simulate the OTP verification process with a delay
     setTimeout(() => {
-      window.location.href = '/new';
-    }, 3000);
+      setLoading(false);
+      window.location.href = '/new'; // Navigate to the next page after the delay
+    }, 2000); // Spinner shows for 2 seconds
   };
 
   // Function to resend OTP (for demonstration purposes)
@@ -51,14 +46,18 @@ export default function NewOTP() {
 
   return (
     <div className="otp">
-      <div className="verification-container">
-      <div>
-            <img class="back" src='back.png' alt='back' onClick={() => window.location.href = '/public/forgot'} >
-            </img>
+      <div className="verification-container-n">
+        <div>
+          <img
+            className="back"
+            src="back.png"
+            alt="back"
+            onClick={() => window.location.href = '/forgot'}
+          />
         </div>
-        <h1>Enter the Verification Code</h1>
+        <h1 className="ot-h1">Enter the Verification Code</h1>
         <div className="otp-container">
-          <form id="otp-form" onSubmit={handleSubmit}>
+          <form id="otp-form-n" onSubmit={handleSubmit}>
             <div className="otp-field">
               <div className="otp-input-group">
                 {otp.map((value, index) => (
@@ -67,7 +66,7 @@ export default function NewOTP() {
                     type="text"
                     maxLength="1"
                     value={value}
-                    className="otp-input"
+                    className="otp-input-n"
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     ref={(el) => (inputs.current[index] = el)}
@@ -76,18 +75,22 @@ export default function NewOTP() {
                 ))}
               </div>
             </div>
+            <button
+              type="submit"
+              id="otp-button"
+              disabled={otp.includes('')}
+            >
+              Verify
+            </button>
           </form>
         </div>
-
-        <button type="submit" id="otp-button" onClick={() => window.location.href = '/new'}  disabled={otp.includes('')}>Verify
-        </button>
-        <p>Did not receive the code?</p>
-        <a href="/newotp" onClick={handleResend}>Resend</a>
+        <p className="o">Did not receive the code?</p>
+        <a href="/newotp" onClick={handleResend} className='a-n'>Resend</a>
       </div>
 
       {loading && (
-        <div className="loading-container" id="loading-container">
-          <div className="spinner"></div>
+        <div className="loading-container-n" id="loading-container">
+          <div className="spinner-n"></div>
           <p>Verifying OTP... Please wait.</p>
         </div>
       )}

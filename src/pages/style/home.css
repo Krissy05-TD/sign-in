@@ -1,35 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
 
-.create h1 {
+.account {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.heading h1 {
     font-family: "Nerko One";
     text-wrap: nowrap;
     align-self: center;
     padding: 10px;
-    margin-bottom: 403px;
-    margin-left: 40px;
-    margin-right: 30px;
-    background-color: rgba(173, 195, 170, 0.5);
-    border: 7px solid rgba(45, 107, 34, 0.2);
-    border-style:ridge;
-    color:white;
+    color:rgb(202, 98, 98);
     font-size: 70px;
-    display: flex;
 }
 
-#button {
-    background-color: rgb(248, 168, 211);
+.heading img {
+    align-self: center;
+    margin: 10px;
+    width:50px;
+    height:50px;
+    border-radius:50px;
+}
+
+.start {
+    font-family: "Nerko One";
+    font-size: 40px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    height: 100px;
+    padding: 0;
+    margin: auto;
+}
+
+.h-form-grid {
+    background-image: url('/public/home.jpg');
+    background-position: center;
+    background-size: cover;
+    background-color: rgba(249, 231, 255, 0.787);
+    border-radius: 5px;
+    padding: 30px;
+    text-align: center;
+    width: 500px;
+    height: 500px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-p {
+    font-size: 17px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 60px;
+}
+
+.button-s {
+    gap: 20px;
+    display: flex;
+    width: 200px;
+    margin-left: 150px;
+}
+
+#h-button {
+    background-color: rgb(154, 182, 207);
     color:rgb(255, 255, 255);
     font-size: 13px;
-    width: 180px;
+    width: 90px;
     padding: 10px;
-    margin-left: 30px;
     border-radius: 5px;
     border: none;
     cursor:pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
-#button:hover {
-    background-color: rgb(241, 131, 182);
+#h-button:hover {
+    background-color: rgb(126, 165, 199);
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0 ,0 ,0.2);
 }

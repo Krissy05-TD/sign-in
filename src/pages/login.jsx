@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { firestore } from "../firebase"; // Ensure you have the firebase.js setup
 import { addDoc, collection } from "@firebase/firestore";
 import "./style/login.css";
@@ -8,10 +8,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, setError] = useState(false);
-  const usersCollection = collection(firestore, "users");
-
-  const messageRef = useRef();
-  const ref = collection(firestore, "messages");
+  const ref = collection(firestore, "login");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -19,7 +16,6 @@ function Login() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(messageRef.current.value);
 
     // Example validation logic (customize as needed)
     if (!username || !password) {
@@ -62,13 +58,9 @@ function Login() {
 
       {/* Right Section */}
       <div className="login-right">
-        <form
-          className="login-form-grid"
-          id="login-form"
-          onSubmit={handleFormSubmit}
-        >
-          <div>
-            <label htmlFor="username">Username</label>
+        <form id="login-form" onSubmit={handleFormSubmit}>
+          <div className="one">
+            <label htmlFor="username" className="user">Username</label>
             <input
               type="text"
               id="username"
@@ -79,11 +71,12 @@ function Login() {
             />
           </div>
 
+          <div className="two">
           <div className="login-password-container">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="pass-bel">Password</label>
             <input
               type={passwordVisible ? "text" : "password"}
-              id="password"
+              id="log-pass"
               placeholder="Enter Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -100,6 +93,14 @@ function Login() {
               onClick={togglePasswordVisibility}
             />
           </div>
+          <div className="l-checkbox">
+            <label htmlFor="remember-me">
+              <input type="checkbox" id="remember-me" />
+              Remember Me
+            </label>
+          </div>
+
+          </div>
 
           {error && (
             <p className="error" style={{ color: "red" }}>
@@ -107,31 +108,8 @@ function Login() {
             </p>
           )}
 
-          <div className="login-with-container">
-            <p className="login-icons">Or you can login with</p>
-            <div className="icon-container">
-              <img
-                className="gmail-icon"
-                src="gmail.png"
-                alt="Gmail"
-                onClick={() => window.location.href = "https://gmail.com/"}
-              />
-              <img
-                className="facebook-icon"
-                src="facebook.png"
-                alt="Facebook"
-                onClick={() => window.location.href = "https://facebook.com/"}
-              />
-              <img
-                className="apple-icon"
-                src="apple.png"
-                alt="Apple"
-                onClick={() => window.location.href = "https://appleid.apple.com/"}
-              />
-            </div>
-          </div>
         </form>
-
+        <div className="button-container">
         <button
           id="login-submitButton"
           type="submit"
@@ -142,10 +120,13 @@ function Login() {
         <a href="/forgot" className="forgot-password">
           Forgot your password?
         </a>
+        </div>
         <p className="login-link">
-          Don't have an account yet? <a href="/create">Create Account</a>
+          Don't have an account yet? <a href="/create" className="login-a">Create Account</a>
         </p>
       </div>
+
+
     </div>
   );
 }

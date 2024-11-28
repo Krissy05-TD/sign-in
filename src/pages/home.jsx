@@ -4,14 +4,13 @@ import { addDoc,collection } from '@firebase/firestore';
 import './style/home.css';
 
 export default function Home() {
-    const messageRef = useRef();
     const ref = collection(firestore, "messages");
 
     const homeRef = useRef();
 
     const handleSave = async (e) => {
         e.preventDefault();
-        console.log(messageRef.current.value);
+        console.log(homeRef.current.value);
 
         const data = {
             home: homeRef.current.value,
@@ -25,11 +24,27 @@ export default function Home() {
     };
 
     return (
-        <div className="Account">
+        <div className="account">
+            
+            <form className='h-form-grid' onSubmit={handleSave}>
+            <div className="heading">
+            <h1>
+                <img src="/logo.jpeg" alt="Four Leaf Clover" />
+                Project 1
+            </h1>
+            </div>
             <h1 className="start" ref={homeRef}>Welcome</h1>
-            <form className='form-grid' onSubmit={handleSave}>
-            <button type="button" onClick={() => window.location.href="create"} id="button">Sign In</button>
-            <button type="button" onClick={() => window.location.href="login"} id="button">Log In</button>
+            <p className="start-p">Please select whether you would want to sign up or log in.</p>
+            <div className="button-s">
+            
+            <div>
+            <button type="button" onClick={() => window.location.href="create"} id="h-button">Sign In</button>
+            </div>
+            <div>
+            <button type="button" onClick={() => window.location.href="login"} id="h-button">Log In</button>
+            </div>
+
+            </div>
             </form>
         </div>
     )

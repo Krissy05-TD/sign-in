@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Nerko+One&display=swap");
 
-body {
+.forgot {
     font-family: "Nerko One";
     font-size: 20px;
     align-items: center;
@@ -17,12 +17,15 @@ body {
 }
 
 .forgot-back {
-    background-color: rgb(206, 231, 255);
+    background-image: url('/public/forgot.jpg');
+    background-position: center;
+    background-size: cover;
     border-radius: 5px;
     padding: 30px;
     text-align: center;
     justify-content: center;
     width: 500px;
+    height: 200px;
     align-items: center;
 }
 
@@ -32,10 +35,25 @@ body {
     cursor: pointer;
 }
 
+.opt {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
 select[name="otp"] {
     border: none;
     padding: 5px;
     border-radius: 5px;
+}
+
+.num, .em {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 #phone-input, 

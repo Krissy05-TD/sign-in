@@ -7,7 +7,16 @@
     margin-right: 90%;
 }
 
-h1 {
+.verification-container-n{
+    background-color: rgba(178, 231, 247, 0.643);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.otp-h1 {
     font-family: "Nerko One";
     display: flex;
     position: relative;
@@ -16,7 +25,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-p {
+.o p {
     position: relative;
     text-align: center;
     margin-top: 30px;
@@ -31,7 +40,6 @@ p {
 }
 
 #otp-form {
-    display: flex;
     justify-content: center;
     gap: 20px;
 }
@@ -42,7 +50,7 @@ p {
     display: flex;
 }
 
-.otp-input-group input[type="text"] {
+.otp-input-n {
     width: 20px;
     height: 20px;
     padding: 10px;
@@ -53,21 +61,13 @@ p {
 }
 
 
-.otp-input-group input[type="text"]:focus {
-    border-color: rgb(235, 155, 102);
+.otp-input-n:focus {
+    border-color: rgb(98, 155, 201);
     box-shadow: 0 2px 2px rgba(0, 0 ,0 ,0.2);
     outline: none;
 }
 
-.verification-container {
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-}
-
-h1 {
+.ot-h1 {
     font-size: 1.5rem;
     color: #333;
 }
@@ -81,7 +81,7 @@ h1 {
 #otp-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color:rgb(243, 173, 140);;
+    background-color:rgb(123, 203, 235);
     color: white;
     border: none;
     border-radius: 4px;
@@ -89,7 +89,7 @@ h1 {
 }
 
 #otp-button:hover {
-    background-color: rgb(255, 146, 96);
+    background-color: rgb(143, 179, 209);
     box-shadow: 0 2px 5px rgba(0, 0 ,0 ,0.2);
     transition: background-color 0.3s ease;
 }
@@ -107,8 +107,8 @@ h1 {
 }
 
 /* Loading screen */
-.loading-container {
-    display: none; /* Hidden by default */
+.loading-container-n {
+    display: flex; /* Hidden by default */
     position: fixed; /* Cover the whole screen */
     top: 50%;
     left: 50%;
@@ -119,16 +119,19 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 0 ,0 ,0.2);
     z-index: 1000; /* Ensure it appears above other content */
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
-.spinner {
-    border: 4px solid rgba(255, 178, 114, 0.678);
-    border-top: 4px solid rgb(246, 136, 145);
+.spinner-n {
+    border: 4px solid rgba(188, 208, 252, 0.678);
+    border-top: 4px solid rgb(70, 106, 160);
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation: spin 3s linear infinite;
+    animation: spin 1s linear infinite;
     margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 @keyframes spin {
@@ -136,7 +139,7 @@ h1 {
     100% { transform: rotate(360deg); }
 }
 
-.loading-container p {
+.loading-container-n p {
     margin: 0px;
     font-size: 16px;
     color: #333;
@@ -145,15 +148,15 @@ h1 {
     padding: 7px;
 }
 
-a {
+.a-n {
     font-size: 13px;
     font-family: Arial, Helvetica, sans-serif;
-    color: rgb(255, 151, 113);
+    color: rgb(79, 161, 175);
     text-decoration: none;
 }
 
-a:hover {
-    color: rgb(250, 106, 53);
+.a-n:hover {
+    color: rgb(83, 206, 228);
     text-decoration: underline;
     transition: background-color 0.3s ease ;
 }
