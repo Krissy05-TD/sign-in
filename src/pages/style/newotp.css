@@ -51,6 +51,7 @@
 }
 
 .otp-input-n {
+    text-align: center;
     width: 20px;
     height: 20px;
     padding: 10px;
@@ -59,7 +60,6 @@
     border: 1px solid #ccc;
     font-size: 24px;
 }
-
 
 .otp-input-n:focus {
     border-color: rgb(98, 155, 201);

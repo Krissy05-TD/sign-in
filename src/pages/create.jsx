@@ -17,7 +17,7 @@ export default function Create() {
 
   const [number, setNumber] = useState("");
   const [status, setStatus] = useState("");
-  const [name, setName] = useState(""); // Add state for the user's name
+  const [firstname, setName] = useState(""); // Add state for the user's name
 
   // States to manage visibility of passwords
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -119,10 +119,6 @@ export default function Create() {
       await addDoc(ref, data);
       console.log("Data saved:", data);
       localStorage.setItem("firstname", data.firstname);
-      localStorage.setItem("lastname", data.lastname);
-      localStorage.setItem("number", data.number);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("password", data.password);
 
       // Send OTP after data is saved
       await sendOtp();  // Call sendOtp to send the OTP to the selected method
@@ -303,5 +299,5 @@ export default function Create() {
         </div>
       </div>
     </div>
-  );
-}
+  )
+};

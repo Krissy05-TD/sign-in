@@ -91,7 +91,7 @@ export default function Forgot() {
             <option value="email">Email</option>
           </select>
         </div>
-          {/* Phone Number Input */}
+          {/* <PhoneInput country={"za"} value={ph} onChange={setPh} /> */}
           {otpMethod === 'number' && (
             <div id="phone-input">
               <label className='num'>Enter Phone Number:</label>
