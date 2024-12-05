@@ -7,7 +7,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.8",
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "create-react-app": "^5.0.1",
     "express": "^4.21.1",
@@ -23,6 +24,7 @@
     "react-router-dom": "^7.0.1",
     "react-scripts": "5.0.1",
     "twilio": "^5.3.6",
+    "url": "^0.11.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
