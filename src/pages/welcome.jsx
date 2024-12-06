@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './style/welcome.css';
 
 export default function Welcome() {
-  const [firstname, setName] = useState('');
+  const [firstname, setFirstName] = useState('');
 
   useEffect(() => {
     // Retrieve the name from localStorage
     const storedName = localStorage.getItem('userName');
     if (storedName) {
-      setName(storedName);
+      setFirstName(storedName);
     }
   }, []);
 
@@ -29,12 +29,33 @@ export default function Welcome() {
       <button type="button" id="wel-mit" onClick={handleSignOut}>
         Sign Out
       </button>
+      <nav id="hamburger-nav">
+        <div class="hamburger-menu">
+            <div class="hamburger-icon" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="menu-links">
+                <li><a href="#about" onclick="toggleMenu()">About</a></li>
+                <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
+                <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+            </div>
+        </div>
+    </nav>
+      <br/>
       <form className="all">
         <div className="form">
-          <h1>Welcome, {firstname}!</h1>
-          <p className="welcome">We're glad to have you here.
+          <h1 className='wel-h1'>Hello, {firstname}
+            <img
+            className='star'
+            src='shining.png'
+            alt='star '
+            />!</h1>
+
+          <p className="welcome">Welcome to my first Project.
           <p>
-            Check out my portfolio to know more about me. <br></br>
+            Check out my portfolio to learn more about me. <br></br>
             <button type='button' onClick={handlePortfolioClick} target="_blank" rel="noopener noreferrer"> 
               My Portfolio
             </button>

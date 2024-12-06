@@ -33,7 +33,7 @@ export default function Home() {
                 Project 1
             </h1>
             </div>
-            <h1 className="start" ref={homeRef}>Welcome</h1>
+            <h1 className="begin" ref={homeRef}>Welcome</h1>
             <p className="start-p">Please select whether you would want to sign up or log in.</p>
             <div className="button-s">
             

@@ -11,7 +11,7 @@ const App = () => {
   const sendOtpEmailRef = useRef();
 
   const handleSendOtp = async () => {
-    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate OTP
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate OTP
     setGeneratedOtp(otp); // Save locally for testing
 
     if (sendOtpNumberRef.current.checked) {
@@ -24,7 +24,7 @@ const App = () => {
         const response = await axios.post("http://localhost:5000/send-otp", {
           method: "number",
           destination: number,
-          otp,
+          otp: generatedOtp,
         });
         setStatus(response.data.message || "Error sending OTP.");
       } catch (error) {
@@ -41,7 +41,7 @@ const App = () => {
         const response = await axios.post("http://localhost:5000/send-otp", {
           method: "email",
           destination: email,
-          otp,
+          otp: generatedOtp,
         });
         setStatus(response.data.message || "Error sending OTP.");
       } catch (error) {

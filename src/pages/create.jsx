@@ -9,6 +9,10 @@ export default function Create() {
 
   const firstnameRef = useRef();
   const lastnameRef = useRef();
+
+  const [generatedOtp, setGeneratedOtp] = useState("");
+
+  const otp = useRef();
   const numberRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -43,8 +47,9 @@ export default function Create() {
     }
   };
 
-  const sendOtp = async () => {
+  const handleSendOtp = async () => {
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
   
     if (sendOtpNumberRef.current.checked) {
       if (!/^\d{10}$/.test(number)) { // Ensure the phone number is valid
@@ -141,7 +146,7 @@ export default function Create() {
       localStorage.setItem("password", data.password);
   
       // Send OTP after data is saved
-      await sendOtp(); // Call sendOtp to send the OTP to the selected method
+      await handleSendOtp(); // Call sendOtp to send the OTP to the selected method
   
       // Redirect to OTP page
       window.location.href = "/otp";
@@ -309,7 +314,7 @@ export default function Create() {
               </div>
             </div>
           </form>
-          <button type="button" id="cre-button" onClick={sendOtp}>
+          <button type="button" id="cre-button" onClick={handleSendOtp, handleSave}>
             Send Verification Code
           </button>
             <div style={{ marginTop: status ? "0px" : "0", marginLeft: status ? "30px" : "0",color: "rgb(236, 107, 129)" }}>

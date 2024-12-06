@@ -1,16 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Nerko+One&display=swap");
 
-h1 {
+.wel-h1 {
     font-family: "Nerko One";
+    background-color: rgba(175, 214, 240, 0.281);
     display: flex;
     position: relative;
-    justify-content: center;
     text-align: center;
     margin-bottom: 20px;
+    justify-content: center;
+    margin-top: 50px;
 }
 
-h1 span {
-    border: 1px solid cornflowerblue;
+.star {
+    width: 20px;
+    height: 20px;
 }
 
 .welcome {
@@ -18,10 +21,109 @@ h1 span {
     background-image: url('/public/background.jpg');
     background-position: center;
     background-repeat: repeat;
+    background-size: contain;
     width: 100vw;
     height: 100vh;
 }
 
+/* Nav Bar */
+nav, 
+.nav-links {
+    display: flex;
+    float: right;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+nav {
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-links {
+    gap: 2rem;
+    list-style: none;
+}
+
+#hamburger-nav {
+    display:none;
+}
+
+.hamburger-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 24px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.hamburger-icon span {
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transition: all 0.3 ease-in-out;
+}
+
+.menu-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    width: fit-content;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3rem ease-in-out;
+}
+
+.menu-links a {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: black;
+    text-decoration: none;
+    transition: all 0.3rem ease-in-out;
+}
+
+.menu-links li {
+    list-style: none;
+}
+
+.menu-links.open {
+    max-height: 300px;
+}
+
+.hamburger-icon.open span:first-child {
+    transform: rotate(45deg) translate(10px, 5px);
+}
+
+.hamburger-icon.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-icon.open span:last-child {
+    transform: rotate(-45deg) translate(10px, -5px);
+}
+
+.hamburger-icon span:first-child {
+    transform: none;
+}
+
+.hamburger-icon span:first-child {
+    opacity: 1;
+}
+
+.hamburger-icon span:first-child {
+    transform: none;
+}
+
+/* The Rest */
 .form button{
     color: white;
     background-color: rgb(174, 214, 179);
@@ -46,6 +148,9 @@ h1 span {
     border-color: none;
     border-style: none;
     cursor: pointer;
+    margin-top: 30px;
+    margin-left: 30px;
+    float: left;
 }
 
 #wel-mit:hover {
@@ -54,3 +159,5 @@ h1 span {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+

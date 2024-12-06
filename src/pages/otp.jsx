@@ -58,7 +58,7 @@ export default function OTP() {
             className="back"
             src="back.png"
             alt="back"
-            onClick={() => window.location.href = '/forgot'} // Adjust URL as needed
+            onClick={() => window.location.href = '/create'} // Adjust URL as needed
           />
         </div>
         <h1 className="otp-h1">Enter the Verification Code</h1>

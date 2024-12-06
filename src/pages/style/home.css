@@ -11,29 +11,27 @@
     font-family: "Nerko One";
     text-wrap: nowrap;
     align-self: center;
+
     padding: 10px;
     color:rgb(202, 98, 98);
     font-size: 70px;
 }
 
 .heading img {
-    align-self: center;
     margin: 10px;
     width:50px;
     height:50px;
     border-radius:50px;
+    border: 5px solid rgb(202, 98, 98);
 }
 
-.start {
+.begin {
     font-family: "Nerko One";
     font-size: 40px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     display: flex;
-    height: 100px;
-    padding: 0;
-    margin: auto;
 }
 
 .h-form-grid {
