@@ -27,9 +27,9 @@ export default function Home() {
         <div className="account">
             
             <form className='h-form-grid' onSubmit={handleSave}>
-            <div className="heading">
+            <div className="heading-h1">
             <h1>
-                <img src="/logo.jpeg" alt="Four Leaf Clover" />
+                <img src="/logo.jpeg" alt="Four Leaf Clover" className="heading-img"/>
                 Project 1
             </h1>
             </div>

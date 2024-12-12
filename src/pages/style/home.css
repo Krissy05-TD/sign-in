@@ -7,18 +7,17 @@
     align-items: center;
 }
 
-.heading h1 {
+.heading-h1 {
     font-family: "Nerko One";
     text-wrap: nowrap;
     align-self: center;
-
     padding: 10px;
     color:rgb(202, 98, 98);
-    font-size: 70px;
+    font-size: 40px;
 }
 
-.heading img {
-    margin: 10px;
+.heading-img {
+    margin-right: 10px;
     width:50px;
     height:50px;
     border-radius:50px;

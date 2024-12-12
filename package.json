@@ -11,7 +11,7 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "create-react-app": "^5.0.1",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "firebase": "^11.0.2",
     "nodemailer": "^6.9.16",
     "otp-input-react": "^0.3.0",
@@ -23,7 +23,7 @@
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^7.0.1",
     "react-scripts": "5.0.1",
-    "twilio": "^5.3.6",
+    "twilio": "^5.3.7",
     "url": "^0.11.4",
     "web-vitals": "^2.1.4"
   },

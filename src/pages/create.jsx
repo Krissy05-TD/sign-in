@@ -10,7 +10,7 @@ export default function Create() {
   const firstnameRef = useRef();
   const lastnameRef = useRef();
 
-  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [generateOtp, setGeneratedOtp] = useState("");
 
   const otp = useRef();
   const numberRef = useRef();
@@ -48,11 +48,11 @@ export default function Create() {
   };
 
   const handleSendOtp = async () => {
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(otp);
+    const generatedOtp = generateOtp(6); // Generate a 6-digit OTP
+    setGeneratedOtp(generatedOtp); // Store it in state
   
     if (sendOtpNumberRef.current.checked) {
-      if (!/^\d{10}$/.test(number)) { // Ensure the phone number is valid
+      if (!/^\d{10}$/.test(number)) {
         setStatus("Please provide a valid 10-digit phone number.");
         return;
       }
@@ -64,7 +64,7 @@ export default function Create() {
         });
         if (response.data.success) {
           setStatus("OTP sent successfully via number.");
-          localStorage.setItem("otp", generatedOtp); // Store OTP temporarily
+          localStorage.setItem("otp", generatedOtp);
         } else {
           setStatus("Failed to send OTP via number.");
         }
@@ -74,7 +74,7 @@ export default function Create() {
       }
     } else if (sendOtpEmailRef.current.checked) {
       const email = emailRef.current.value;
-      if (!/\S+@\S+\.\S+/.test(email)) { // Ensure the email is valid
+      if (!/\S+@\S+\.\S+/.test(email)) {
         setStatus("Please provide a valid email.");
         return;
       }
@@ -86,7 +86,7 @@ export default function Create() {
         });
         if (response.data.success) {
           setStatus("OTP sent successfully via email.");
-          localStorage.setItem("otp", generatedOtp); // Store OTP temporarily
+          localStorage.setItem("otp", generatedOtp);
         } else {
           setStatus("Failed to send OTP via email.");
         }
@@ -97,8 +97,8 @@ export default function Create() {
     } else {
       setStatus("Please select a method to send the OTP.");
     }
-    console.log("Backend Response:", response.data);
   };
+  
 
   const handleSave = async (e) => {
     e.preventDefault();
