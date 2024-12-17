@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { firestore } from "../firebase";
 import { addDoc, collection } from "@firebase/firestore";
-import axios from "axios";
 import "./style/create.css";
 
 export default function Create() {
@@ -9,17 +8,16 @@ export default function Create() {
 
   const firstnameRef = useRef();
   const lastnameRef = useRef();
-
-  const [generateOtp, setGenerateOtp] = useState("");
-
   const numberRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const sendOtpNumberRef = useRef();
   const sendOtpEmailRef = useRef();
+
   const [number, setNumber] = useState("");
   const [status, setStatus] = useState("");
   const [firstname, setFirstName] = useState("");
+  const [otp, setOtp] = useState(""); // New state for OTP
 
   // States to manage visibility of passwords
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -49,21 +47,20 @@ export default function Create() {
     const generateOtp = () => {
       return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
     };
-  
+
     const otp = generateOtp();
-    setGenerateOtp(otp);
-  
-    console.log("Generated OTP:", otp);
-  
+    setOtp(otp); // Set OTP in state to display on the page
+    setStatus(`Generated OTP: ${otp}`);
+
     if (sendOtpNumberRef.current.checked || sendOtpEmailRef.current.checked) {
       const otpMethod = sendOtpNumberRef.current.checked ? "number" : "email";
       const destination = sendOtpNumberRef.current.checked
         ? number.replace(/\s/g, "")
         : emailRef.current.value;
-  
+
       try {
         console.log(`Sending OTP to ${otpMethod}:`, destination);
-  
+
         // Save OTP to Firestore
         await addDoc(collection(firestore, "otp"), {
           method: otpMethod,
@@ -71,11 +68,17 @@ export default function Create() {
           otp,
           createdAt: new Date(),
         });
-  
+
         // Save OTP in localStorage
         localStorage.setItem("generatedOtp", otp);
         setStatus(`OTP sent successfully via ${otpMethod}.`);
-        window.location.href = "/otp";
+        
+        console.log(`Generated OTP: ${otp}`);
+
+        // Add a small delay before redirecting to OTP page
+        setTimeout(() => {
+          window.location.href = "/otp"; // Redirect after showing OTP
+        }, 2000); // 2-second delay for the user to see the OTP
       } catch (error) {
         console.error("Error sending OTP:", error.message);
         setStatus(`Failed to send OTP via ${otpMethod}.`);
@@ -84,7 +87,6 @@ export default function Create() {
       setStatus("Please select a method to send the OTP.");
     }
   };
-  
 
   const handleNumberChange = (e) => {
     let input = e.target.value;
@@ -102,19 +104,19 @@ export default function Create() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
+
     // Sanitize and retrieve input values
     const sanitizedNumber = number.replace(/\s/g, ""); // Remove spaces from the phone number
     const password = passwordRef.current.value;
     const confirmPassword = document.getElementById("c-confirm-password").value;
-  
+
     // Determine OTP method
     const otpMethod = sendOtpNumberRef.current.checked
       ? "number"
       : sendOtpEmailRef.current.checked
       ? "email"
       : "none";
-  
+
     const data = {
       firstname: firstnameRef.current.value.trim(),
       lastname: lastnameRef.current.value.trim(),
@@ -123,38 +125,38 @@ export default function Create() {
       password,
       otpMethod,
     };
-  
+
     // Validations
     if (!data.firstname || !data.lastname || !data.number || !data.email || !data.password) {
       alert("All fields are required.");
       return;
     }
-  
+
     if (!/^\d{10}$/.test(data.number)) {
       alert("Invalid phone number format. Please enter a valid 10-digit number.");
       return;
     }
-  
+
     if (!/\S+@\S+\.\S+/.test(data.email)) {
       alert("Invalid email format. Please enter a valid email.");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       alert("Passwords do not match. Please check and try again.");
       return;
     }
-  
+
     if (!otpMethod || otpMethod === "none") {
       alert("Please select a method to send the OTP.");
       return;
     }
-  
+
     try {
       // Save data to Firestore
       await addDoc(ref, data);
       console.log("Data saved to Firestore:", data);
-  
+
       // Save data to localStorage
       localStorage.setItem("userName", data.firstname);
       localStorage.setItem("firstname", data.firstname);
@@ -162,18 +164,15 @@ export default function Create() {
       localStorage.setItem("number", data.number);
       localStorage.setItem("email", data.email);
       localStorage.setItem("password", data.password);
-  
+
       // Send OTP
       await handleSendOtp();
-  
-      // Redirect to OTP page
-      window.location.href = "/otp";
+
     } catch (error) {
       console.error("Error saving data to Firestore:", error.message);
       alert("An error occurred while saving data. Please try again.");
     }
-  };  
-  
+  };
 
   const togglePasswordVisibility = (field) => {
     if (field === "password") {
@@ -201,6 +200,7 @@ export default function Create() {
                   type="text"
                   placeholder="Enter First Name"
                   ref={firstnameRef}
+                  value={firstname}
                   id="firstname"
                   onChange={(e) => setFirstName(e.target.value)}
                   required
@@ -336,9 +336,9 @@ export default function Create() {
           <button type="button" id="cre-button" onClick={handleSendOtp, handleSave}>
             Send Verification Code
           </button>
-            <div style={{ marginTop: status ? "0px" : "0", marginLeft: status ? "30px" : "0",color: "rgb(236, 107, 129)" }}>
-                {status && <p>{status}</p>}
-            </div>
+          <div style={{ marginTop: status ? "0px" : "0", marginLeft: status ? "30px" : "0", color: "rgb(236, 107, 129)" }}>
+            {status && <p>{status}</p>}
+          </div>
           <p className="create-p">
             Already have an account?
             <a href="/login" className="create-link">
@@ -350,4 +350,3 @@ export default function Create() {
     </div>
   );
 }
-

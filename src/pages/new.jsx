@@ -1,12 +1,9 @@
 import React, { useRef, useState } from "react";
-import { firestore } from "../firebase";
-import { addDoc, collection } from "@firebase/firestore";
 import "./style/new.css";
 
 export default function CreatePassword() {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-  const ref = collection(firestore, "passwords");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -61,7 +58,7 @@ export default function CreatePassword() {
 
     setLoading(true);
     try {
-      await addDoc(ref, data);
+      await (data);
       window.location.href = "/login"; // Redirect after successful save
     } catch (e) {
       console.error(e);

@@ -6,6 +6,9 @@ export default function NewOTP() {
   const [loading, setLoading] = useState(false);
   const inputs = useRef([]);
 
+  // Retrieve OTP from localStorage
+  const storedOtp = localStorage.getItem('generatedOtp');
+
   // Function to handle OTP input change
   const handleChange = (e, index) => {
     const value = e.target.value;
@@ -32,16 +35,28 @@ export default function NewOTP() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate the OTP verification process with a delay
-    setTimeout(() => {
+    // Check if the entered OTP matches the stored OTP
+    const enteredOtp = otp.join('');
+    if (enteredOtp === storedOtp) {
+      // OTP is correct, proceed to the next page
+      setTimeout(() => {
+        setLoading(false);
+        alert('OTP verified successfully!');
+        window.location.href = '/new'; // Navigate to the next page after verification
+      }, 2000); // Spinner shows for 2 seconds
+    } else {
+      // OTP is incorrect, show an error message
       setLoading(false);
-      window.location.href = '/new'; // Navigate to the next page after the delay
-    }, 2000); // Spinner shows for 2 seconds
+      alert('Incorrect OTP. Please try again.');
+    }
   };
 
   // Function to resend OTP (for demonstration purposes)
   const handleResend = () => {
-    alert('OTP resent');
+    // Log OTP to the console before proceeding
+    console.log('Resending OTP:', storedOtp);
+    alert('OTP resent. Check the console for the OTP.');
+    // Optionally, you can regenerate the OTP and resend it here.
   };
 
   return (

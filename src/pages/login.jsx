@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { firestore } from "../firebase"; // Ensure you have the firebase.js setup
-import { collection, getDocs, query, where } from "@firebase/firestore";
+import { getDocs, query, where, collection } from "@firebase/firestore";
 import "./style/login.css";
 
 export default function Login() {
-  const ref = collection(firestore, "users"); // Assuming "users" collection stores registered accounts
+  const ref = collection(firestore, "login");
 
-  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState(""); // Changed from username to firstname
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [error, setError] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -17,39 +18,45 @@ export default function Login() {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    if (!username || !password) {
-      alert("Username and password are required!");
+    // Example validation logic (customize as needed)
+    if (!firstname || !password) {
+      setError(true);
       return;
     }
 
+    setError(false);
+
     try {
-      // Check if the username exists
-      const usernameQuery = query(ref, where("username", "==", username));
-      const usernameSnapshot = await getDocs(usernameQuery);
-
-      if (usernameSnapshot.empty) {
-        alert("This user does not exist. Please create an account.");
-        return;
-      }
-
-      // Check if the password matches
+      // Query Firestore for the matching user using firstname and password
       const loginQuery = query(
         ref,
-        where("username", "==", username),
+        where("firstname", "==", firstname.trim()), // Search by firstname
         where("password", "==", password)
       );
+
       const loginSnapshot = await getDocs(loginQuery);
 
       if (loginSnapshot.empty) {
-        alert("Incorrect username or password.");
+        alert("Invalid firstname or password. Please try again.");
         return;
       }
 
-      // Redirect to the welcome page if login is successful
-      console.log("Login successful for:", username);
-      window.location.href = "/welcome";
-    } catch (err) {
-      console.error("Error during login:", err);
+      // Fetch user data (firstname, username)
+      let userData = null;
+      loginSnapshot.forEach((doc) => {
+        userData = doc.data();
+      });
+
+      if (userData) {
+        // Save firstname and username (email) to localStorage
+        localStorage.setItem("firstname", userData.firstname || "User");
+        localStorage.setItem("username", userData.username); // Assuming username is the email
+
+        console.log("Login successful for:", userData.firstname);
+        window.location.href = "/welcome"; // Redirect to the welcome page
+      }
+    } catch (e) {
+      console.error("Error during login:", e);
       alert("An error occurred. Please try again.");
     }
   };
@@ -69,15 +76,15 @@ export default function Login() {
       <div className="login-right">
         <form id="login-form" onSubmit={handleSave}>
           <div className="one">
-            <label htmlFor="username" className="user">
-              Username
+            <label htmlFor="firstname" className="user">
+              Firstname
             </label>
             <input
               type="text"
               id="username"
-              placeholder="Enter Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter Firstname"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
               required
             />
           </div>
@@ -113,6 +120,12 @@ export default function Login() {
               </label>
             </div>
           </div>
+
+          {error && (
+            <p className="error" style={{ color: "red" }}>
+              * Firstname and password are required!
+            </p>
+          )}
         </form>
         <div className="button-container">
           <button id="login-submitButton" type="submit" onClick={handleSave}>

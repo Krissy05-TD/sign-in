@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './style/forgot.css'; // Assuming you have the CSS file for styling
 
-// Function to handle OTP sending logic
 export default function Forgot() {
   const [otpMethod, setOtpMethod] = useState('');
   const [number, setNumber] = useState('');
@@ -26,56 +25,42 @@ export default function Forgot() {
     setNumber(input);
   };
 
+  const generateAndSendOTP = async (otp, method) => {
+    try {
+      console.log('OTP generation triggered');
+      console.log('Generated OTP:', otp); // Log OTP to console for now
+  
+      // Save OTP in localStorage
+      localStorage.setItem('generatedOtp', otp);
+      localStorage.setItem('otpMethod', method);
+  
+      // Simulate sending OTP (you can integrate actual OTP sending logic here)
+      alert('OTP sent successfully!');
+      window.location.href = '/newotp'; // Redirect to OTP verification page
+    } catch (error) {
+      console.error('Error generating OTP:', error);
+      setErrorMessage('Error generating OTP.');
+    }
+  };  
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log('Form submitted'); // Log to verify form submission
+  
+    if (!otpMethod) return setErrorMessage('Please select an OTP method.');
+  
+    const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
+    console.log('Generated OTP:', otp); // Log OTP before passing to the function
+  
     if (otpMethod === 'number' && number) {
-      const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
-      try {
-        const response = await fetch('/sendOtp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            otp,
-            number
-          })
-        });
-
-        if (response.ok) {
-          alert('OTP sent successfully!');
-          window.location.href = 'newotp'; // Redirect after sending OTP
-        } else {
-          setErrorMessage('Failed to send OTP via phone.');
-        }
-      } catch (error) {
-        console.error('Error sending OTP via phone:', error);
-        setErrorMessage('Error sending OTP.');
-      }
+      await generateAndSendOTP(otp, 'number');
     } else if (otpMethod === 'email' && email) {
-      const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
-      try {
-        const response = await fetch('/sendOtpEmail', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            otp,
-            email
-          })
-        });
-
-        if (response.ok) {
-          alert('OTP sent successfully!');
-        } else {
-          setErrorMessage('Failed to send OTP via email.');
-        }
-      } catch (error) {
-        console.error('Error sending OTP via email:', error);
-        setErrorMessage('Error sending OTP.');
-      }
+      await generateAndSendOTP(otp, 'email');
     } else {
       setErrorMessage('Please fill in the required fields.');
     }
-  };
+  };  
 
   return (
     <div>
