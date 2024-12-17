@@ -10,18 +10,16 @@ export default function Create() {
   const firstnameRef = useRef();
   const lastnameRef = useRef();
 
-  const [generateOtp, setGeneratedOtp] = useState("");
+  const [generateOtp, setGenerateOtp] = useState("");
 
-  const otp = useRef();
   const numberRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const sendOtpNumberRef = useRef();
   const sendOtpEmailRef = useRef();
-  const response = useRef();
   const [number, setNumber] = useState("");
   const [status, setStatus] = useState("");
-  const [firstname, setFirstName] = useState(""); // Add state for the user's name
+  const [firstname, setFirstName] = useState("");
 
   // States to manage visibility of passwords
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -31,68 +29,56 @@ export default function Create() {
   useEffect(() => {
     const storedName = localStorage.getItem('userName');
     if (storedName) {
-      setFirstName(storedName); // Set the name in state if it exists in localStorage
+      setFirstName(storedName);
     } 
   }, []);
 
   const handleCheckboxChange = (type) => {
     if (type === "number") {
       if (sendOtpNumberRef.current.checked) {
-        sendOtpEmailRef.current.checked = false; // Uncheck the email checkbox
+        sendOtpEmailRef.current.checked = false;
       }
     } else if (type === "email") {
       if (sendOtpEmailRef.current.checked) {
-        sendOtpNumberRef.current.checked = false; // Uncheck the number checkbox
+        sendOtpNumberRef.current.checked = false;
       }
     }
   };
 
   const handleSendOtp = async () => {
-    const generatedOtp = generateOtp(6); // Generate a 6-digit OTP
-    setGeneratedOtp(generatedOtp); // Store it in state
+    const generateOtp = () => {
+      return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
+    };
   
-    if (sendOtpNumberRef.current.checked) {
-      if (!/^\d{10}$/.test(number)) {
-        setStatus("Please provide a valid 10-digit phone number.");
-        return;
-      }
+    const otp = generateOtp();
+    setGenerateOtp(otp);
+  
+    console.log("Generated OTP:", otp);
+  
+    if (sendOtpNumberRef.current.checked || sendOtpEmailRef.current.checked) {
+      const otpMethod = sendOtpNumberRef.current.checked ? "number" : "email";
+      const destination = sendOtpNumberRef.current.checked
+        ? number.replace(/\s/g, "")
+        : emailRef.current.value;
+  
       try {
-        const response = await axios.post("http://localhost:5000/send-otp", {
-          method: "number",
-          destination: number,
-          otp: generatedOtp,
+        console.log(`Sending OTP to ${otpMethod}:`, destination);
+  
+        // Save OTP to Firestore
+        await addDoc(collection(firestore, "otp"), {
+          method: otpMethod,
+          destination,
+          otp,
+          createdAt: new Date(),
         });
-        if (response.data.success) {
-          setStatus("OTP sent successfully via number.");
-          localStorage.setItem("otp", generatedOtp);
-        } else {
-          setStatus("Failed to send OTP via number.");
-        }
+  
+        // Save OTP in localStorage
+        localStorage.setItem("generatedOtp", otp);
+        setStatus(`OTP sent successfully via ${otpMethod}.`);
+        window.location.href = "/otp";
       } catch (error) {
-        console.error("Error sending OTP via number:", error.message);
-        setStatus("Error sending OTP via number.");
-      }
-    } else if (sendOtpEmailRef.current.checked) {
-      const email = emailRef.current.value;
-      if (!/\S+@\S+\.\S+/.test(email)) {
-        setStatus("Please provide a valid email.");
-        return;
-      }
-      try {
-        const response = await axios.post("http://localhost:5000/send-otp", {
-          method: "email",
-          destination: email,
-          otp: generatedOtp,
-        });
-        if (response.data.success) {
-          setStatus("OTP sent successfully via email.");
-          localStorage.setItem("otp", generatedOtp);
-        } else {
-          setStatus("Failed to send OTP via email.");
-        }
-      } catch (error) {
-        console.error("Error sending OTP via email:", error.message);
-        setStatus("Error sending OTP via email.");
+        console.error("Error sending OTP:", error.message);
+        setStatus(`Failed to send OTP via ${otpMethod}.`);
       }
     } else {
       setStatus("Please select a method to send the OTP.");
@@ -100,9 +86,29 @@ export default function Create() {
   };
   
 
+  const handleNumberChange = (e) => {
+    let input = e.target.value;
+    input = input.replace(/\D/g, "");
+
+    // Add spaces automatically as user types
+    if (input.length > 3 && input.length <= 6) {
+      input = input.slice(0, 3) + " " + input.slice(3);
+    } else if (input.length > 6) {
+      input = input.slice(0, 3) + " " + input.slice(3, 6) + " " + input.slice(6, 10);
+    }
+
+    setNumber(input);
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
   
+    // Sanitize and retrieve input values
+    const sanitizedNumber = number.replace(/\s/g, ""); // Remove spaces from the phone number
+    const password = passwordRef.current.value;
+    const confirmPassword = document.getElementById("c-confirm-password").value;
+  
+    // Determine OTP method
     const otpMethod = sendOtpNumberRef.current.checked
       ? "number"
       : sendOtpEmailRef.current.checked
@@ -110,11 +116,11 @@ export default function Create() {
       : "none";
   
     const data = {
-      firstname: firstnameRef.current.value,
-      lastname: lastnameRef.current.value,
-      number: numberRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
+      firstname: firstnameRef.current.value.trim(),
+      lastname: lastnameRef.current.value.trim(),
+      number: sanitizedNumber,
+      email: emailRef.current.value.trim(),
+      password,
       otpMethod,
     };
   
@@ -123,12 +129,24 @@ export default function Create() {
       alert("All fields are required.");
       return;
     }
-    if (!/\S+@\S+\.\S+/.test(data.email)) {
-      alert("Invalid email format.");
+  
+    if (!/^\d{10}$/.test(data.number)) {
+      alert("Invalid phone number format. Please enter a valid 10-digit number.");
       return;
     }
-    if (!/^\d{10}$/.test(data.number)) {
-      alert("Invalid phone number format.");
+  
+    if (!/\S+@\S+\.\S+/.test(data.email)) {
+      alert("Invalid email format. Please enter a valid email.");
+      return;
+    }
+  
+    if (password !== confirmPassword) {
+      alert("Passwords do not match. Please check and try again.");
+      return;
+    }
+  
+    if (!otpMethod || otpMethod === "none") {
+      alert("Please select a method to send the OTP.");
       return;
     }
   
@@ -137,25 +155,26 @@ export default function Create() {
       await addDoc(ref, data);
       console.log("Data saved to Firestore:", data);
   
-      // Save to localStorage (optional, can be removed for security)
-      localStorage.setItem("userName", firstname);
+      // Save data to localStorage
+      localStorage.setItem("userName", data.firstname);
       localStorage.setItem("firstname", data.firstname);
       localStorage.setItem("lastname", data.lastname);
       localStorage.setItem("number", data.number);
       localStorage.setItem("email", data.email);
       localStorage.setItem("password", data.password);
   
-      // Send OTP after data is saved
-      await handleSendOtp(); // Call sendOtp to send the OTP to the selected method
+      // Send OTP
+      await handleSendOtp();
   
       // Redirect to OTP page
       window.location.href = "/otp";
-    } catch (e) {
-      console.error("Error saving data to Firestore:", e.message);
+    } catch (error) {
+      console.error("Error saving data to Firestore:", error.message);
+      alert("An error occurred while saving data. Please try again.");
     }
-  };
+  };  
+  
 
-  // Toggle password visibility
   const togglePasswordVisibility = (field) => {
     if (field === "password") {
       setPasswordVisible((prev) => !prev);
@@ -210,7 +229,7 @@ export default function Create() {
                   ref={numberRef}
                   id="number"
                   value={number}
-                  onChange={(e) => setNumber(e.target.value)}
+                  onChange={handleNumberChange}
                   required
                 />
               </label>

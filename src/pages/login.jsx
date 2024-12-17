@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { firestore } from "../firebase"; // Ensure you have the firebase.js setup
-import { addDoc, collection } from "@firebase/firestore";
+import { collection, getDocs, query, where } from "@firebase/firestore";
 import "./style/login.css";
 
 export default function Login() {
-  const ref = collection(firestore, "login");
+  const ref = collection(firestore, "users"); // Assuming "users" collection stores registered accounts
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [error, setError] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
@@ -18,31 +17,40 @@ export default function Login() {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // Example validation logic (customize as needed)
     if (!username || !password) {
-      setError(true);
+      alert("Username and password are required!");
       return;
     }
 
-    setError(false);
-
-    // You can optionally log user data or perform actions on successful login
-    const data = {
-      username,
-      password,
-    };
-
     try {
-      await addDoc(ref, data);
-    } catch (e) {
-      console.log("Data saved to Firestore");
-    }
+      // Check if the username exists
+      const usernameQuery = query(ref, where("username", "==", username));
+      const usernameSnapshot = await getDocs(usernameQuery);
 
-    try {
-      console.log("Login data:", data); // Log user login attempt
-      window.location.href = "/welcome"; // Redirect to welcome page
-    } catch (e) {
-      console.error("Error during login:", e);
+      if (usernameSnapshot.empty) {
+        alert("This user does not exist. Please create an account.");
+        return;
+      }
+
+      // Check if the password matches
+      const loginQuery = query(
+        ref,
+        where("username", "==", username),
+        where("password", "==", password)
+      );
+      const loginSnapshot = await getDocs(loginQuery);
+
+      if (loginSnapshot.empty) {
+        alert("Incorrect username or password.");
+        return;
+      }
+
+      // Redirect to the welcome page if login is successful
+      console.log("Login successful for:", username);
+      window.location.href = "/welcome";
+    } catch (err) {
+      console.error("Error during login:", err);
+      alert("An error occurred. Please try again.");
     }
   };
 
@@ -105,12 +113,6 @@ export default function Login() {
               </label>
             </div>
           </div>
-
-          {error && (
-            <p className="error" style={{ color: "red" }}>
-              * Username and password are required!
-            </p>
-          )}
         </form>
         <div className="button-container">
           <button id="login-submitButton" type="submit" onClick={handleSave}>
@@ -130,5 +132,3 @@ export default function Login() {
     </div>
   );
 }
-
-

@@ -12,6 +12,20 @@ export default function Forgot() {
     setOtpMethod(e.target.value);
   };
 
+  const handleNumberChange = (e) => {
+    let input = e.target.value;
+    input = input.replace(/\D/g, "");
+
+    // Add spaces automatically as user types
+    if (input.length > 3 && input.length <= 6) {
+      input = input.slice(0, 3) + " " + input.slice(3);
+    } else if (input.length > 6) {
+      input = input.slice(0, 3) + " " + input.slice(3, 6) + " " + input.slice(6, 10);
+    }
+
+    setNumber(input);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,7 +52,6 @@ export default function Forgot() {
         setErrorMessage('Error sending OTP.');
       }
     } else if (otpMethod === 'email' && email) {
-      // Send OTP via email (client-side logic)
       const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
       try {
         const response = await fetch('/sendOtpEmail', {
@@ -77,21 +90,21 @@ export default function Forgot() {
               onClick={() => window.location.href = '/login'} // Redirect to previous page
             />
           </div>
-        <div className='opt'>
-          <label>Send OTP via:</label>
-          <select
-            name="otp"
-            id="forgot-otp"
-            value={otpMethod}
-            onChange={handleOtpMethodChange}
-            required
-          >
-            <option value="">Select an Option</option>
-            <option value="number">Phone Number</option>
-            <option value="email">Email</option>
-          </select>
-        </div>
-          {/* <PhoneInput country={"za"} value={ph} onChange={setPh} /> */}
+          <div className='opt'>
+            <label>Send OTP via:</label>
+            <select
+              name="otp"
+              id="forgot-otp"
+              value={otpMethod}
+              onChange={handleOtpMethodChange}
+              required
+            >
+              <option value="">Select an Option</option>
+              <option value="number">Phone Number</option>
+              <option value="email">Email</option>
+            </select>
+          </div>
+
           {otpMethod === 'number' && (
             <div id="phone-input">
               <label className='num'>Enter Phone Number:</label>
@@ -101,13 +114,12 @@ export default function Forgot() {
                 id="forgot-number"
                 placeholder="012 345 6789"
                 value={number}
-                onChange={(e) => setNumber(e.target.value)}
+                onChange={handleNumberChange}
                 required
               />
             </div>
           )}
 
-          {/* Email Input */}
           {otpMethod === 'email' && (
             <div id="email-input">
               <label className='em'>Enter Email:</label>
@@ -122,6 +134,7 @@ export default function Forgot() {
               />
             </div>
           )}
+
           <button type="submit" id="for-submit">Send OTP</button>
 
           {/* Error Message Display */}
@@ -130,4 +143,4 @@ export default function Forgot() {
       </div>
     </div>
   );
-};
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+</head>
+<body>
+    <h1>OTP Verification</h1>
+
+    <div>
+        <label>
+            <input type="radio" name="method" value="number" checked> Send OTP via SMS
+        </label>
+        <label>
+            <input type="radio" name="method" value="email"> Send OTP via Email
+        </label>
+    </div>
+
+    <input type="text" id="destination" placeholder="Enter phone or email">
+    <button id="sendOtpBtn">Send OTP</button>
+
+    <br><br>
+
+    <input type="text" id="otp" placeholder="Enter OTP">
+    <button id="verifyOtpBtn">Verify OTP</button>
+
+    <p id="result"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>

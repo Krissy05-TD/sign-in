@@ -1,10 +1,15 @@
 import React, { useState, useRef } from 'react';
+import { collection, query, where, getDocs } from "@firebase/firestore";
+import { firestore } from "../firebase";
 import './style/otp.css';
 
 export default function OTP() {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [loading, setLoading] = useState(false);
   const inputs = useRef([]);
+
+  // Retrieve the correct OTP from localStorage
+  const correctOtp = localStorage.getItem('generatedOtp');
 
   // Function to handle OTP input change
   const handleChange = (e, index) => {
@@ -14,7 +19,6 @@ export default function OTP() {
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Move to the next input if the current one is filled
       if (value && index < 5) {
         inputs.current[index + 1].focus();
       }
@@ -24,30 +28,57 @@ export default function OTP() {
   // Function to handle backspace
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputs.current[index - 1].focus(); // Focus on previous input if current is empty
+      inputs.current[index - 1].focus();
     }
   };
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show spinner
-
-    // Simulate a 2-second verification process
-    setTimeout(() => {
-      setLoading(false); // Hide spinner
-      window.location.href = '/welcome'; // Redirect to the welcome page
-    }, 2000);
+    setLoading(true);
+  
+    const userOtp = otp.join("");
+    console.log("User OTP entered:", userOtp);
+  
+    try {
+      // Fetch OTP from Firestore
+      const otpRef = collection(firestore, "otp");
+      const q = query(otpRef, where("otp", "==", userOtp));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        console.log("OTP verified successfully.");
+        setLoading(false);
+        window.location.href = "/welcome";
+      } else {
+        alert("The OTP you entered is incorrect. Please try again.");
+        setOtp(new Array(6).fill(""));
+        inputs.current[0].focus();
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error.message);
+      alert("An error occurred while verifying the OTP.");
+      setLoading(false);
+    }
   };
 
   // Function to resend OTP
   const handleResend = () => {
-    setOtp(new Array(6).fill('')); // Reset OTP fields
-    inputs.current[0].focus(); // Focus on the first input
-    alert('OTP resent');
+    // Generate a new OTP
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log('New OTP:', newOtp); // Show new OTP in the console
+
+    // Save the new OTP in localStorage
+    localStorage.setItem('generatedOtp', newOtp);
+
+    // Reset input fields
+    setOtp(new Array(6).fill(''));
+    inputs.current[0].focus();
+
+    alert('A new OTP has been sent.');
   };
 
-  // Check if all fields are filled
   const isOtpComplete = otp.every((digit) => digit !== '');
 
   return (
@@ -58,7 +89,7 @@ export default function OTP() {
             className="back"
             src="back.png"
             alt="back"
-            onClick={() => window.location.href = '/create'} // Adjust URL as needed
+            onClick={() => window.location.href = '/create'}
           />
         </div>
         <h1 className="otp-h1">Enter the Verification Code</h1>
@@ -83,7 +114,7 @@ export default function OTP() {
               <button
                 type="submit"
                 id="otp-btn"
-                disabled={!isOtpComplete} // Button is disabled unless all fields are filled
+                disabled={!isOtpComplete}
               >
                 Verify
               </button>
