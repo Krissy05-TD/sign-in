@@ -1,11 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { firestore } from "../firebase";
-import { addDoc, collection } from "@firebase/firestore";
+import { setDoc, doc } from "@firebase/firestore"; // Use setDoc to overwrite the document with email as ID
 import "./style/create.css";
 
 export default function Create() {
-  const ref = collection(firestore, "users");
-
   const firstnameRef = useRef();
   const lastnameRef = useRef();
   const numberRef = useRef();
@@ -62,7 +60,7 @@ export default function Create() {
         console.log(`Sending OTP to ${otpMethod}:`, destination);
 
         // Save OTP to Firestore
-        await addDoc(collection(firestore, "otp"), {
+        await setDoc(doc(firestore, "otp", destination), {
           method: otpMethod,
           destination,
           otp,
@@ -154,7 +152,7 @@ export default function Create() {
 
     try {
       // Save data to Firestore
-      await addDoc(ref, data);
+      await setDoc(doc(firestore, "users", data.email), data);
       console.log("Data saved to Firestore:", data);
 
       // Save data to localStorage

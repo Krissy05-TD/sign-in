@@ -27,30 +27,30 @@ export default function Login() {
     setError(false);
 
     try {
-      // Query Firestore for the matching user using firstname and password
+      // Query Firestore for the matching user using firstname (or email) and password
       const loginQuery = query(
         ref,
-        where("firstname", "==", firstname.trim()), // Search by firstname
+        where("email", "==", firstname.trim()), // Search by email (as stored in Firestore)
         where("password", "==", password)
       );
 
       const loginSnapshot = await getDocs(loginQuery);
 
       if (loginSnapshot.empty) {
-        alert("Invalid firstname or password. Please try again.");
+        alert("Invalid email or password. Please try again.");
         return;
       }
 
-      // Fetch user data (firstname, username)
+      // Fetch user data (firstname, email)
       let userData = null;
       loginSnapshot.forEach((doc) => {
         userData = doc.data();
       });
 
       if (userData) {
-        // Save firstname and username (email) to localStorage
+        // Save firstname and email (username) to localStorage
         localStorage.setItem("firstname", userData.firstname || "User");
-        localStorage.setItem("username", userData.username); // Assuming username is the email
+        localStorage.setItem("username", userData.email); // Assuming email is the username
 
         console.log("Login successful for:", userData.firstname);
         window.location.href = "/welcome"; // Redirect to the welcome page
@@ -77,12 +77,12 @@ export default function Login() {
         <form id="login-form" onSubmit={handleSave}>
           <div className="one">
             <label htmlFor="firstname" className="user">
-              Firstname
+              Email
             </label>
             <input
               type="text"
-              id="username"
-              placeholder="Enter Firstname"
+              id="firstname"
+              placeholder="Enter Email"
               value={firstname}
               onChange={(e) => setFirstname(e.target.value)}
               required
@@ -123,7 +123,7 @@ export default function Login() {
 
           {error && (
             <p className="error" style={{ color: "red" }}>
-              * Firstname and password are required!
+              * Email and password are required!
             </p>
           )}
         </form>
